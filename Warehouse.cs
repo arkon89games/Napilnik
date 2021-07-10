@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 namespace napilnik
 {
-    public class Warehouse
+    public class Warehouse : IWarehouse
     {
         private SupportedGoods _supportedGoods;
         private List<StoredGood> _storedGoods;
@@ -16,6 +16,7 @@ namespace napilnik
 
         public void Delive(Good good, int count)
         {
+
             if (count <= 0)
             {
                 throw new ArgumentOutOfRangeException("count должен быть больше ноля");
@@ -23,7 +24,20 @@ namespace napilnik
 
             if (_supportedGoods.Contains(good.Name))
             {
-                _storedGoods.Add(new StoredGood(good.Name));
+                bool match = false;
+                foreach (var item in _storedGoods)
+                {
+                    if (item.Name == good.Name)
+                    {
+                        item.Add(count);
+                        match = true;
+                    }
+                }
+                if (match == false)
+                {
+                    _storedGoods.Add(new StoredGood(good.Name, count));
+                }
+
             }
             else
             {
@@ -39,11 +53,6 @@ namespace napilnik
                 result[i] = new Good(_storedGoods[i].Name, _storedGoods[i].Count);
             }
             return result;
-        }
-
-        public void PickUp(Good good)
-        {
-            throw new NotImplementedException("Не реализовано получение товара со склада");
         }
     }
 }

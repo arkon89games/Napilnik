@@ -3,7 +3,7 @@ namespace napilnik
 {
     public class StoredGood : AbstractGood
     {
-        public StoredGood(string name) : base(name)
+        public StoredGood(string name, int count) : base(name, count)
         {
 
         }

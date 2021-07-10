@@ -5,22 +5,52 @@ namespace napilnik
 {
     public class Cart
     {
-        private List<CartItem> _goods;
+        private List<CartItem> _cartItems;
+        private IWarehouse _warehouse;
 
-        public Cart()
+        public Cart(IWarehouse warehouse)
         {
-            _goods = new List<CartItem>();
+            _warehouse = warehouse ?? throw new ArgumentNullException(nameof(warehouse));
+            _cartItems = new List<CartItem>();
+
         }
 
         public void Add(Good good, int count)
         {
-            for (int g = 0; g < _goods.Count; g++)
+            if (good is null)
             {
-                if (_goods[g].Name == good.Name)
+                throw new ArgumentNullException(nameof(good));
+            }
+
+            Good[] leftovers = _warehouse.GetLeftovers();
+            foreach (var item in leftovers)
+            {
+                if (item.Name == good.Name)
                 {
-                    for (int i = 0; i < count; i++)
+                    if (item.Count < count)
                     {
-                        _goods[g].Add(count);
+                        throw new ArgumentException("В корзину нельзя ложить больше, чем есть на складе!");
+                    }
+                }
+            }
+
+            if (_cartItems.Count == 0)
+            {
+                AddNewItem(new Good(good.Name, count));
+            }
+            else
+            {
+                for (int itemIndex = 0; itemIndex < _cartItems.Count; itemIndex++)
+                {
+                    if (_cartItems[itemIndex].Name == good.Name)
+                    {
+                        _cartItems[itemIndex].Add(count);
+                        Console.WriteLine($"В корзину добавлен товар {good.Name} в количестве {count}шт.");
+
+                    }
+                    else
+                    {
+                        AddNewItem(new Good(good.Name, count));
                     }
                 }
             }
@@ -28,8 +58,23 @@ namespace napilnik
 
         public Good[] GetGoods()
         {
-            var result = new Good[0];
-            throw new NotImplementedException();
+            var result = new Good[_cartItems.Count];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = new Good(_cartItems[i].Name, _cartItems[i].Count);
+            }
+
+            return result;
+        }
+
+        public Order Order()
+        {
+            return new Order();
+        }
+
+        private void AddNewItem(Good good)
+        {
+            _cartItems.Add(new CartItem(good.Name, good.Count));
         }
     }
 }

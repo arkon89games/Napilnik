@@ -4,7 +4,7 @@ namespace napilnik
 {
     class Program
     {
-        private static bool _userExit;
+
         static void Main(string[] args)
         {
             Good iPhone12 = new Good("IPhone 12");
@@ -13,30 +13,41 @@ namespace napilnik
             Warehouse warehouse = new Warehouse();
             Shop shop = new Shop(warehouse);
 
-            warehouse.Delive(iPhone12, 10);
-            warehouse.Delive(iPhone11, 1);
+            // warehouse.Delive(iPhone12, 10);
+            // warehouse.Delive(iPhone11, 1);
 
-            User user = CreateUser(shop);
-            user.ExitShop += OnUserExit;
-            //TODO описать работу с пользователем
-            while (_userExit == false)
-            {
-                user.WaitInput();
-            }
+            Console.WriteLine("\n Остатки на складе:");
+            PrintGoods(warehouse.GetLeftovers());
+
+            Cart cart = shop.Cart();
+            cart.Add(iPhone12, 4);
+            cart.Add(iPhone11, 3);
+
+            Console.WriteLine("\n Товары в корзине:");
+            PrintGoods(cart.GetGoods());
+
+            Console.WriteLine(cart.Order().Paylink);
+
             Console.WriteLine("\n Всего доброго! Заходи ещё\n");
-
-
-            throw new NotImplementedException();
         }
 
-        static User CreateUser(Shop shop)
-        {
-            return new User(shop, shop.Cart());
-        }
 
-        static void OnUserExit()
+
+        static void PrintGoods(Good[] goods)
         {
-            _userExit = true;
+            if (goods is null)
+            {
+                throw new ArgumentNullException(nameof(goods));
+            }
+
+            if (goods.Length == 0)
+            {
+                throw new ArgumentException("На печать отправлен пустой список товаров");
+            }
+            foreach (var item in goods)
+            {
+                Console.WriteLine($"{item.Name} {item.Count} ");
+            }
         }
     }
 }
