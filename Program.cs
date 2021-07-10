@@ -4,32 +4,20 @@ namespace napilnik
 {
     class Program
     {
-        public const int StartHealth = 100;
-        public const int BotDamage = 10;
-        public const int MaxBullets = 10;
-
-        private static bool _gameOver = false;
-
         static void Main(string[] args)
         {
-            Player player = new Player(StartHealth);
-            player.Died += OnPlayerDied;
-            Bot bot1 = new Bot(new Weapon(BotDamage, MaxBullets));
-            Bot bot2 = new Bot(new Weapon(BotDamage, MaxBullets));
+            Warehouse warehouse = new Warehouse();
+            Shop shop = new Shop(warehouse);
 
-            while (_gameOver == false)
-            {
-                bot1.OnSeePlayer(player);
-                System.Threading.Thread.Sleep(1000);
-                bot2.OnSeePlayer(player);
-                System.Threading.Thread.Sleep(1000);
-            }
-            player.Died -= OnPlayerDied;
+            User user = CreateUser(shop);
+            //TODO описать работу с пользователем
+
+            throw new NotImplementedException();
         }
 
-        static void OnPlayerDied()
+        static User CreateUser(Shop shop)
         {
-            _gameOver = true;
+            return new User(shop, shop.Cart());
         }
     }
 }
