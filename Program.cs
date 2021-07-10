@@ -2,19 +2,22 @@
 
 namespace napilnik
 {
-    class Program
+    public static class Program
     {
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Good iPhone12 = new Good("IPhone 12");
             Good iPhone11 = new Good("IPhone 11");
 
+            // Warehouse warehouse = new Warehouse();   это то как я пишу
+            // Warehouse warehouse = new();             это предлагает Roslynator
+            // а как рекомендует наш преподаватель? 
             Warehouse warehouse = new Warehouse();
             Shop shop = new Shop(warehouse);
 
-            // warehouse.Delive(iPhone12, 10);
-            // warehouse.Delive(iPhone11, 1);
+            warehouse.Delive(iPhone12, 10);
+            warehouse.Delive(iPhone11, 1);
 
             Console.WriteLine("\n Остатки на складе:");
             PrintGoods(warehouse.GetLeftovers());
@@ -33,7 +36,7 @@ namespace napilnik
 
 
 
-        static void PrintGoods(Good[] goods)
+        private static void PrintGoods(Good[] goods)
         {
             if (goods is null)
             {

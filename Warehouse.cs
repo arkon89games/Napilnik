@@ -6,7 +6,7 @@ namespace napilnik
     public class Warehouse : IWarehouse
     {
         private List<StoredGood> _storedGoods;
-        private SupportedGoods _supportedGoods;
+        private readonly SupportedGoods _supportedGoods;
 
         public Warehouse()
         {
@@ -16,7 +16,6 @@ namespace napilnik
 
         public void Delive(Good good, int count)
         {
-
             if (count <= 0)
             {
                 throw new ArgumentOutOfRangeException(paramName: "count должен быть больше ноля");
@@ -37,7 +36,6 @@ namespace napilnik
                 {
                     _storedGoods.Add(new StoredGood(good.Name, count));
                 }
-
             }
             else
             {
