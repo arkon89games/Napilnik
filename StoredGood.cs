@@ -1,13 +1,11 @@
 using System;
 namespace napilnik
 {
-    public class StoredGood
+    public class StoredGood : AbstractGood
     {
-        public string Name { get { return _name; } }
-        private readonly string _name;
-        public StoredGood(string name)
+        public StoredGood(string name) : base(name)
         {
-            _name = name;
+
         }
     }
 }

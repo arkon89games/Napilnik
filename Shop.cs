@@ -23,7 +23,7 @@ namespace napilnik
 
         public Good[] GetGoods()
         {
-            throw new NotImplementedException();
+            return _warehouse.GetLeftovers();
         }
     }
 }

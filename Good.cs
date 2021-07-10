@@ -1,14 +1,11 @@
 using System;
 namespace napilnik
 {
-    public class Good
+    public class Good : AbstractGood
     {
-        public string Name { get { return _name; } }
-        private readonly string _name;
-
-        public Good(string name)
+        public Good(string name, int count = 0) : base(name, count)
         {
-            _name = name;
+
         }
     }
 }
