@@ -2,22 +2,26 @@ using System;
 
 namespace napilnik
 {
-    public class User
+    public class User : IUser
     {
         public Action ExitShop;
-        private readonly IShop shop;
-        private readonly Cart cart;
+        private readonly IShop _shop;
+        private readonly Cart _cart;
+
+        private Good[] _actualGoods = new Good[0];
 
         public User(IShop shop, Cart cart)
         {
-            this.shop = shop;
-            this.cart = cart;
+            _shop = shop;
+            _cart = cart;
         }
 
         public void WaitInput()
         {
             Console.WriteLine("\n[1] Посмотреть товары  \n[2] добавить в корзину  \n[3] Оформить покупку  \n[Esc] Выйти из магазина");
-            var userInput = Console.ReadKey().Key;
+
+            Console.Write("> ");
+            var userInput = Console.ReadKey(false).Key;
 
             switch (userInput)
             {
@@ -49,18 +53,44 @@ namespace napilnik
 
         private void ViewProducts()
         {
-            Good[] goods = shop.GetGoods();
-            PrintGoods(goods);
+            _actualGoods = _shop.GetGoods();
+            PrintGoods(_actualGoods);
             AddToCard();
         }
 
         private void AddToCard()
         {
-            Console.WriteLine("\nВведи ID товара, для добавления в корзину или [Q] для выхода в меню");
-            var userInput = Console.Read();
+            if (_actualGoods.Length <= 0)
+            {
+                throw new ArgumentException("[User]: AddToCard() _actualGoods.Length <= 0");
+            }
 
+            Console.WriteLine("\nВведи ID товара, для добавления в корзину");
+            Console.Write("> ");
+            int userInputID = Console.Read();
+            if (userInputID < 0 || userInputID > _actualGoods.GetUpperBound(0))
+            {
+                Console.WriteLine($"\nОшибка ввода : ({userInputID}) Выход в меню");
+                return;
+            }
+            System.Threading.Thread.Sleep(1000);
 
-            throw new NotImplementedException();
+            Console.WriteLine("\nВведи желаемое количество товара, для добавления в корзину");
+            Console.Write("> ");
+            int userInputCount = Console.Read();
+
+            if (userInputID < 0)
+            {
+                Console.WriteLine("\nОшибка ввода. Выход в меню");
+                return;
+            }
+            else if (userInputID > _actualGoods[userInputID].Count)
+            {
+                Console.WriteLine("\nВ наличии нет такого количества товара. Выход в меню");
+                return;
+            }
+
+            _cart.Add(_actualGoods[userInputID], userInputCount);
         }
 
         private void MakePurchase()
@@ -70,9 +100,11 @@ namespace napilnik
 
         private void PrintGoods(Good[] goods)
         {
-            foreach (var good in goods)
+            Console.WriteLine("\n");
+
+            for (int i = 0; i < goods.Length; i++)
             {
-                Console.WriteLine(good.Name);
+                Console.WriteLine($"ID {i} : {goods[i].Name} : {goods[i].Count}");
             }
             //TODO метод недореализован. В задаче 'Вывод всех товаров на складе с их остатком'
         }

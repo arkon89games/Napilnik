@@ -33,7 +33,12 @@ namespace napilnik
 
         public Good[] GetLeftovers()
         {
-            throw new NotImplementedException("Не реализовано получение остатков со склада");
+            Good[] result = new Good[_storedGoods.Count];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = new Good(_storedGoods[i].Name, _storedGoods[i].Count);
+            }
+            return result;
         }
 
         public void PickUp(Good good)
