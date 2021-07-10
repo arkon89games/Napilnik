@@ -5,8 +5,8 @@ namespace napilnik
 {
     public class Warehouse : IWarehouse
     {
-        private SupportedGoods _supportedGoods;
         private List<StoredGood> _storedGoods;
+        private SupportedGoods _supportedGoods;
 
         public Warehouse()
         {
