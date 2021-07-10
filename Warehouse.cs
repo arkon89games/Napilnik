@@ -19,7 +19,7 @@ namespace napilnik
 
             if (count <= 0)
             {
-                throw new ArgumentOutOfRangeException("count должен быть больше ноля");
+                throw new ArgumentOutOfRangeException(paramName: "count должен быть больше ноля");
             }
 
             if (_supportedGoods.Contains(good.Name))

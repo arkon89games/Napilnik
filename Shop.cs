@@ -5,7 +5,7 @@ namespace napilnik
 {
     public class Shop
     {
-        private Warehouse _warehouse;
+        private readonly Warehouse _warehouse;
         public Shop(Warehouse warehouse)
         {
             _warehouse = warehouse;
